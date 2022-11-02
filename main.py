@@ -2,6 +2,10 @@ import pygame as pg
 from random import choice,seed,random
 from config import *
 from service import *
+from os import path,mkdir
+
+if not path.isdir("Results"):
+    mkdir("Results")
 
 seeds = random()
 seed(seeds)
