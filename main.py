@@ -11,7 +11,7 @@ clock = pg.time.Clock()
 screen = pg.display.set_mode((W, H))
 running = True
 queue = [((400,400),(1,0,0,0)),((400,400),(0,1,0,0)),((400,400),(0,0,1,0)),((400,400),(0,0,0,1))]
-history = []
+history = [(400,400)]
 draw_lines(screen,20)
 screen.blit(wall_empty,(400,400))
 last_type =  None
@@ -20,6 +20,8 @@ while running:
     if queue:
         block = queue[-1]
         queue.pop()
+        if get_position(*block) in history:
+            continue
         if 15<block[0][0]>W or 15<block[0][1]>H:
             continue
         type_block = choice(types)
@@ -29,8 +31,6 @@ while running:
         paries = wall(type_block,get_position(*block))
         while not check(block[0],paries):
             paries.rotate()
-        if paries.position_wall in history:
-                continue
         else:
             history.append(paries.position_wall)
         queue += add_queue(block[0],paries=paries)
