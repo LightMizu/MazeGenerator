@@ -38,7 +38,7 @@ while running:
         
     else:
         print('finish')
-        pg.image.save(screen, f'Result/{seeds}.png' )
+        pg.image.save(screen, f'Result/{seeds}.jpg' )
         running = False
     pg.display.update() 
     for event in pg.event.get():
