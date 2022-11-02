@@ -46,11 +46,11 @@ class wall():
 #Function
 
 
-def draw_lines(screen:pg.Surface) -> None:
-    for x in range(size_cell,H,size_cell):
-        pg.draw.line(screen,(100,100,100),(x,0),(x,W))
-    for y in range(size_cell,W,size_cell):
-        pg.draw.line(screen,(100,100,100),(0,y),(H,y))
+def draw_lines(screen:pg.Surface, light:int) -> None:
+    for x in range(size_cell,W,size_cell):
+        pg.draw.line(screen,(light,light,light),(x,0),(x,H))
+    for y in range(size_cell,H,size_cell):
+        pg.draw.line(screen,(light,light,light),(0,y),(W,y))
 
 def get_position(pos: tuple, connect: tuple) -> tuple:
     return (pos[0]+coordinates[connect][0], pos[1]+coordinates[connect][1])
