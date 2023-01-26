@@ -1,7 +1,8 @@
 import pygame as pg
-from random import choice,seed,random
+from random import seed,random
 from config import *
 from service import *
+from copy import deepcopy
 from os import path,mkdir
 
 if not path.isdir("Results"):
@@ -14,37 +15,42 @@ pg.init()
 clock = pg.time.Clock()
 screen = pg.display.set_mode((W, H))
 running = True
-queue = [((400,400),(1,0,0,0)),((400,400),(0,1,0,0)),((400,400),(0,0,1,0)),((400,400),(0,0,0,1))]
-history = [(400,400)]
+center = ((W//size_cell)//2*size_cell,(H//size_cell)//2*size_cell)
+queue = [(center,(1,0,0,0)),(center,(0,1,0,0)),(center,(0,0,1,0)),(center,(0,0,0,1))]
+history = [center]
 draw_lines(screen,20)
-screen.blit(wall_empty,(400,400))
+screen.blit(wall_empty,center)
 last_type =  None
 
 while running:
     if queue:
         block = queue[-1]
         queue.pop()
+        pos = block[0]
+        print(*pos)
         if get_position(*block) in history:
             continue
-        if 15<block[0][0]>W or 15<block[0][1]>H:
+        if 0>pos[0] or W<pos[0] or 0>pos[1] or H<pos[1]:
             continue
-        type_block = choice(types)
-        while last_type == type_block:
-            type_block = choice(types)
+        print(*pos)
+        type_block = choice()
+        '''while last_type == type_block:
+            type_block = choice()'''
         last_type = type_block
         paries = wall(type_block,get_position(*block))
-        while not check(block[0],paries):
+        while not check(pos,paries):
             paries.rotate()
         else:
             history.append(paries.position_wall)
-        queue += add_queue(block[0],paries=paries)
+        queue += add_queue(pos,paries=paries)
         paries.draw(screen=screen)
         
     else:
         print('finish')
         pg.image.save(screen, f'Results/{seeds}.jpg' )
         running = False
-    pg.display.update() 
+    pg.display.update()
+    clock.tick(60)
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False

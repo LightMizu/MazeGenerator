@@ -1,15 +1,16 @@
 import pygame as pg
 from config import *
+from random import random
 #Variables
 
 pg.init()
 sc = pg.display.set_mode((H, W))
 
-wall_break = pg.image.load('Image/break.png').convert()
-wall_empty = pg.image.load('Image/empty.png').convert()
-wall_wall = pg.image.load('Image/wall.png').convert()
-wall_corner = pg.image.load('Image/corner.png').convert()
-wall_tunnel = pg.image.load('Image/tunnel.png').convert()
+wall_break = pg.transform.scale(pg.image.load('Image/break.png').convert(),(size_cell,size_cell))
+wall_empty = pg.transform.scale(pg.image.load('Image/empty.png').convert(),(size_cell,size_cell))
+wall_wall = pg.transform.scale(pg.image.load('Image/wall.png').convert(),(size_cell,size_cell))
+wall_corner = pg.transform.scale(pg.image.load('Image/corner.png').convert(),(size_cell,size_cell))
+wall_tunnel = pg.transform.scale(pg.image.load('Image/tunnel.png').convert(),(size_cell,size_cell))
 types = (wall_break,wall_empty,wall_wall,wall_corner,wall_tunnel)
 
 connects = {
@@ -42,7 +43,19 @@ class wall():
         self.type_wall = pg.transform.rotate(self.type_wall,90)
     def draw(self,screen: pg.Surface) -> None:
         screen.blit(self.type_wall,self.position_wall)
-        
+    def get_name(ind):
+        match ind:
+            case 0:
+                return "wall_break"
+            case 1:
+                return "wall_empty"
+            case 2:
+                return "wall_wall"
+            case 3:
+                return "wall_corner"
+            case 4:
+                return "wall_tunnel"
+                
 #Function
 
 
@@ -82,3 +95,10 @@ def add_queue(wall_position: tuple, paries: wall) -> tuple:
                         new_connect[i] = 1
                         new_queue.append((paries.position_wall,tuple(new_connect)))
     return tuple(new_queue)
+def choice():
+    rnd = random()
+    prob_sum = 0
+    for i, prob in enumerate(probabilities.values()):
+        prob_sum += prob
+        if rnd < prob_sum:
+            return types[i]
